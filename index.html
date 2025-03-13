@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Werchter Interactieve Kaart</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+        .video-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #000;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .close-button {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        video {
+            width: 100%;
+            height: auto;
+        }
+        .location-info {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="video-overlay" id="videoOverlay">
+        <div class="video-container">
+            <button class="close-button" onclick="closeVideo()">Sluiten</button>
+            <video id="videoPlayer" controls>
+                <source src="" type="video/mp4">
+                Uw browser ondersteunt geen video weergave.
+            </video>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialiseer de kaart met een iets lagere zoom
+        var map = L.map('map').setView([50.9735, 4.7069], 14);
+
+        // Voeg de kaartlaag toe
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Definieer alle locaties met exacte coördinaten
+        var locations = [
+            {
+                name: "GBS De Kameleon",
+                position: [50.9716, 4.7007],
+                video: "https://drive.google.com/uc?export=download&id=1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u",
+                address: "Kerkstraat 1, 3118 Rotselaar"
+            },
+            {
+                name: "Camping Klokkenberg",
+                position: [50.97829043445607, 4.724100922888267],
+                video: "https://drive.google.com/uc?export=download&id=1YLorjVOv3R5ivFbq55IASMALQZ56zcQS",
+                address: "Grotestraat 120, 3118 Rotselaar"
+            },
+            {
+                name: "Chiro Werchter",
+                position: [50.97183716738979, 4.704431452468566],
+                video: "https://drive.google.com/uc?export=download&id=1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t",
+                address: "Nieuwebaan 10, 3118 Rotselaar"
+            },
+            {
+                name: "Delvora",
+                position: [50.9697176477687, 4.689669075765796],
+                video: "https://drive.google.com/uc?export=download&id=1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu",
+                address: "Haachtsesteenweg 6, 3118 Rotselaar"
+            },
+            {
+                name: "KFC Werchter",
+                position: [50.97732766499299, 4.711792725482745],
+                video: "https://drive.google.com/uc?export=download&id=1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs",
+                address: "Grotestraat 52, 3118 Rotselaar"
+            }
+        ];
+
+        // Voeg markers toe voor alle locaties
+        locations.forEach(function(location) {
+            var marker = L.marker(location.position).addTo(map);
+            marker.bindPopup(`
+                <strong>${location.name}</strong>
+                <div class="location-info">${location.address}</div>
+            `);
+            
+            marker.on('click', function() {
+                var videoOverlay = document.getElementById('videoOverlay');
+                var videoPlayer = document.getElementById('videoPlayer');
+                
+                videoPlayer.src = location.video;
+                videoOverlay.style.display = 'block';
+                videoPlayer.currentTime = 0;
+                videoPlayer.play().catch(function(error) {
+                    console.log("Video afspelen mislukt:", error);
+                });
+            });
+        });
+
+        // Functie om de video te sluiten
+        function closeVideo() {
+            var videoOverlay = document.getElementById('videoOverlay');
+            var videoPlayer = document.getElementById('videoPlayer');
+            
+            videoOverlay.style.display = 'none';
+            videoPlayer.pause();
+            videoPlayer.currentTime = 0;
+        }
+    </script>
+</body>
+</html> 
