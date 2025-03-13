@@ -26,6 +26,7 @@
             position: relative;
             width: 80%;
             max-width: 800px;
+            height: 80vh;
             margin: 50px auto;
             background-color: #000;
             padding: 20px;
@@ -41,10 +42,12 @@
             padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
+            z-index: 1001;
         }
-        video {
+        iframe {
             width: 100%;
-            height: auto;
+            height: 100%;
+            border: none;
         }
         .location-info {
             font-size: 14px;
@@ -58,10 +61,7 @@
     <div class="video-overlay" id="videoOverlay">
         <div class="video-container">
             <button class="close-button" onclick="closeVideo()">Sluiten</button>
-            <video id="videoPlayer" controls>
-                <source src="" type="video/mp4">
-                Uw browser ondersteunt geen video weergave.
-            </video>
+            <iframe id="videoPlayer" allow="autoplay"></iframe>
         </div>
     </div>
 
@@ -80,31 +80,31 @@
             {
                 name: "GBS De Kameleon",
                 position: [50.9716, 4.7007],
-                video: "https://drive.google.com/uc?export=download&id=1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u",
+                video: "https://drive.google.com/file/d/1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u/preview",
                 address: "Kerkstraat 1, 3118 Rotselaar"
             },
             {
                 name: "Camping Klokkenberg",
                 position: [50.97829043445607, 4.724100922888267],
-                video: "https://drive.google.com/uc?export=download&id=1YLorjVOv3R5ivFbq55IASMALQZ56zcQS",
+                video: "https://drive.google.com/file/d/1YLorjVOv3R5ivFbq55IASMALQZ56zcQS/preview",
                 address: "Grotestraat 120, 3118 Rotselaar"
             },
             {
                 name: "Chiro Werchter",
                 position: [50.97183716738979, 4.704431452468566],
-                video: "https://drive.google.com/uc?export=download&id=1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t",
+                video: "https://drive.google.com/file/d/1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t/preview",
                 address: "Nieuwebaan 10, 3118 Rotselaar"
             },
             {
                 name: "Delvora",
                 position: [50.9697176477687, 4.689669075765796],
-                video: "https://drive.google.com/uc?export=download&id=1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu",
+                video: "https://drive.google.com/file/d/1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu/preview",
                 address: "Haachtsesteenweg 6, 3118 Rotselaar"
             },
             {
                 name: "KFC Werchter",
                 position: [50.97732766499299, 4.711792725482745],
-                video: "https://drive.google.com/uc?export=download&id=1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs",
+                video: "https://drive.google.com/file/d/1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs/preview",
                 address: "Grotestraat 52, 3118 Rotselaar"
             }
         ];
@@ -123,10 +123,6 @@
                 
                 videoPlayer.src = location.video;
                 videoOverlay.style.display = 'block';
-                videoPlayer.currentTime = 0;
-                videoPlayer.play().catch(function(error) {
-                    console.log("Video afspelen mislukt:", error);
-                });
             });
         });
 
@@ -136,8 +132,7 @@
             var videoPlayer = document.getElementById('videoPlayer');
             
             videoOverlay.style.display = 'none';
-            videoPlayer.pause();
-            videoPlayer.currentTime = 0;
+            videoPlayer.src = '';
         }
     </script>
 </body>
