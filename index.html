@@ -231,6 +231,8 @@
             var videoPlayer = document.getElementById('videoPlayer');
             var loader = document.getElementById('videoLoader');
             
+            console.log('Probeer video te laden:', videoUrl);
+            
             // Toon de loader
             loader.style.display = 'block';
             
@@ -240,21 +242,24 @@
             // Controleer eerst of de video beschikbaar is
             fetch(videoUrl, { method: 'HEAD' })
                 .then(response => {
+                    console.log('Video check response:', response.status, response.statusText);
                     if (!response.ok) {
-                        throw new Error('Video niet gevonden');
+                        throw new Error('Video niet gevonden (status: ' + response.status + ')');
                     }
                     // Video is beschikbaar, laad hem
+                    console.log('Video gevonden, start laden...');
                     videoPlayer.src = videoUrl;
                     videoPlayer.load();
-                    videoPlayer.play()
+                    return videoPlayer.play()
                         .catch(error => {
                             console.error('Fout bij afspelen:', error);
-                            alert('Er is een probleem met het afspelen van de video. Probeer het later opnieuw.');
+                            alert('Er is een probleem met het afspelen van de video: ' + error.message);
+                            throw error;
                         });
                 })
                 .catch(error => {
                     console.error('Fout bij laden:', error);
-                    alert('De video kon niet worden geladen. Probeer het later opnieuw.');
+                    alert('De video kon niet worden geladen: ' + error.message);
                 })
                 .finally(() => {
                     loader.style.display = 'none';
@@ -264,13 +269,14 @@
         // Event listeners voor de video player
         var videoPlayer = document.getElementById('videoPlayer');
         videoPlayer.addEventListener('loadeddata', function() {
+            console.log('Video data geladen');
             document.getElementById('videoLoader').style.display = 'none';
         });
         
         videoPlayer.addEventListener('error', function(e) {
-            console.error('Video error:', e);
+            console.error('Video error:', e.target.error);
             document.getElementById('videoLoader').style.display = 'none';
-            alert('Er is een probleem met het afspelen van de video. Probeer het later opnieuw.');
+            alert('Er is een probleem met het afspelen van de video. Error code: ' + (e.target.error ? e.target.error.code : 'onbekend'));
         });
 
         // Functie om de video te sluiten
