@@ -231,7 +231,13 @@
             var videoPlayer = document.getElementById('videoPlayer');
             var loader = document.getElementById('videoLoader');
             
-            console.log('Probeer video te laden:', window.location.origin + videoUrl);
+            // Gebruik de volledige URL
+            var fullUrl = window.location.origin + videoUrl;
+            console.log('Video URL:', {
+                original: videoUrl,
+                full: fullUrl,
+                origin: window.location.origin
+            });
             
             // Toon de loader
             loader.style.display = 'block';
@@ -239,30 +245,25 @@
             // Toon de overlay
             videoOverlay.style.display = 'block';
 
-            // Gebruik de volledige URL
-            var fullUrl = window.location.origin + videoUrl;
+            // Probeer de video direct te laden zonder fetch check
+            videoPlayer.src = fullUrl;
+            videoPlayer.load();
             
-            // Gebruik no-cors mode om CORS problemen te omzeilen
-            fetch(fullUrl, { 
-                method: 'HEAD',
-                mode: 'no-cors'
-            })
-                .then(response => {
-                    console.log('Video check response:', response.type);
-                    // Video is beschikbaar, laad hem
-                    console.log('Video gevonden, start laden...');
-                    videoPlayer.src = fullUrl;
-                    videoPlayer.load();
-                    return videoPlayer.play()
-                        .catch(error => {
-                            console.error('Fout bij afspelen:', error);
-                            alert('Er is een probleem met het afspelen van de video: ' + error.message);
-                            throw error;
-                        });
+            // Log video element details
+            console.log('Video element:', {
+                src: videoPlayer.src,
+                error: videoPlayer.error,
+                networkState: videoPlayer.networkState,
+                readyState: videoPlayer.readyState
+            });
+
+            videoPlayer.play()
+                .then(() => {
+                    console.log('Video started playing');
                 })
                 .catch(error => {
-                    console.error('Fout bij laden:', error);
-                    alert('De video kon niet worden geladen: ' + error.message);
+                    console.error('Play error:', error);
+                    alert('Er is een probleem met het afspelen van de video: ' + error.message);
                 })
                 .finally(() => {
                     loader.style.display = 'none';
@@ -277,9 +278,14 @@
         });
         
         videoPlayer.addEventListener('error', function(e) {
-            console.error('Video error:', e.target.error);
+            var error = e.target.error;
+            console.error('Video error:', {
+                code: error ? error.code : 'unknown',
+                message: error ? error.message : 'unknown',
+                mediaError: error
+            });
             document.getElementById('videoLoader').style.display = 'none';
-            alert('Er is een probleem met het afspelen van de video. Error code: ' + (e.target.error ? e.target.error.code : 'onbekend'));
+            alert('Er is een probleem met het afspelen van de video. Error code: ' + (error ? error.code : 'onbekend'));
         });
 
         // Functie om de video te sluiten
