@@ -231,7 +231,7 @@
             var videoPlayer = document.getElementById('videoPlayer');
             var loader = document.getElementById('videoLoader');
             
-            console.log('Probeer video te laden:', videoUrl);
+            console.log('Probeer video te laden:', window.location.origin + videoUrl);
             
             // Toon de loader
             loader.style.display = 'block';
@@ -239,8 +239,11 @@
             // Toon de overlay
             videoOverlay.style.display = 'block';
 
+            // Gebruik de volledige URL
+            var fullUrl = window.location.origin + videoUrl;
+            
             // Gebruik no-cors mode om CORS problemen te omzeilen
-            fetch(videoUrl, { 
+            fetch(fullUrl, { 
                 method: 'HEAD',
                 mode: 'no-cors'
             })
@@ -248,7 +251,7 @@
                     console.log('Video check response:', response.type);
                     // Video is beschikbaar, laad hem
                     console.log('Video gevonden, start laden...');
-                    videoPlayer.src = videoUrl;
+                    videoPlayer.src = fullUrl;
                     videoPlayer.load();
                     return videoPlayer.play()
                         .catch(error => {
