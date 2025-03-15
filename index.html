@@ -227,53 +227,27 @@
         // Functie om een video te tonen
         function showVideo(video) {
             var videoOverlay = document.getElementById('videoOverlay');
+            var videoContainer = videoOverlay.querySelector('.video-container');
             var videoPlayer = document.getElementById('videoPlayer');
-            var videoLoader = document.getElementById('videoLoader');
             
-            // Reset de video player
-            videoLoader.style.display = 'block';
-            
-            // Toon de overlay eerst
-            videoOverlay.style.display = 'block';
-            
-            // Laad dan de video
+            // Reset en toon de video player
             videoPlayer.src = video;
             videoPlayer.load();
             videoPlayer.play();
             
-            // Verberg de loader wanneer de video kan afspelen
-            videoPlayer.oncanplay = function() {
-                videoLoader.style.display = 'none';
-            };
+            // Toon de overlay
+            videoOverlay.style.display = 'block';
         }
 
         // Functie om de video te sluiten
         function closeVideo() {
             var videoOverlay = document.getElementById('videoOverlay');
             var videoPlayer = document.getElementById('videoPlayer');
-            var videoLoader = document.getElementById('videoLoader');
             
             videoOverlay.style.display = 'none';
             videoPlayer.pause();
             videoPlayer.src = '';
-            videoLoader.style.display = 'none';
         }
-
-        // Pre-load de iframes
-        var preloadedVideos = {};
-        locations.forEach(function(location) {
-            var iframe = document.createElement('iframe');
-            iframe.src = location.video;
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-            preloadedVideos[location.video] = iframe;
-            
-            // Verwijder de pre-loaded iframe na 2 seconden
-            setTimeout(() => {
-                document.body.removeChild(iframe);
-                delete preloadedVideos[location.video];
-            }, 2000);
-        });
 
         // Voeg markers toe voor alle locaties
         var markers = {};
@@ -287,23 +261,7 @@
             `);
             
             marker.on('click', function() {
-                var video = document.createElement('video');
-                video.src = location.video;
-                video.controls = true;
-                video.autoplay = true;
-                video.style.width = '100%';
-                video.style.height = '100%';
-                
-                var videoOverlay = document.getElementById('videoOverlay');
-                var videoContainer = videoOverlay.querySelector('.video-container');
-                var oldVideo = videoContainer.querySelector('video');
-                var oldIframe = videoContainer.querySelector('iframe');
-                
-                if (oldVideo) videoContainer.removeChild(oldVideo);
-                if (oldIframe) videoContainer.removeChild(oldIframe);
-                
-                videoContainer.appendChild(video);
-                videoOverlay.style.display = 'block';
+                showVideo(location.video);
             });
         });
 
