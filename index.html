@@ -80,6 +80,11 @@
             justify-content: center;
             align-items: center;
         }
+        video {
+            width: 100%;
+            height: 100%;
+            max-height: calc(100vh - 140px);
+        }
         .loader {
             display: none;
             width: 48px;
@@ -146,7 +151,7 @@
         <div class="video-container">
             <button class="close-button" onclick="closeVideo()">Sluiten</button>
             <div class="loader" id="videoLoader"></div>
-            <iframe id="videoPlayer" allow="autoplay" onload="this.classList.add('loaded'); document.getElementById('videoLoader').style.display = 'none';"></iframe>
+            <video id="videoPlayer" controls autoplay></video>
         </div>
     </div>
 
@@ -166,55 +171,55 @@
             {
                 name: "GBS De Kameleon",
                 position: [50.9716, 4.7007],
-                video: "Kameleon.mp4",
+                video: "./Kameleon.mp4",
                 address: "Kerkstraat 1, 3118 Rotselaar"
             },
             {
                 name: "Camping Klokkenberg",
                 position: [50.97829043445607, 4.724100922888267],
-                video: "camping-klokkenberg.mp4",
+                video: "./camping-klokkenberg.mp4",
                 address: "Grotestraat 120, 3118 Rotselaar"
             },
             {
                 name: "Chiro Werchter",
                 position: [50.97183716738979, 4.704431452468566],
-                video: "Chiro.mp4",
+                video: "./Chiro.mp4",
                 address: "Nieuwebaan 10, 3118 Rotselaar"
             },
             {
                 name: "Delvora",
                 position: [50.9697176477687, 4.689669075765796],
-                video: "Delvora.mp4",
+                video: "./Delvora.mp4",
                 address: "Haachtsesteenweg 6, 3118 Rotselaar"
             },
             {
                 name: "KFC Werchter",
                 position: [50.97732766499299, 4.711792725482745],
-                video: "KFC-Werchter.mp4",
+                video: "./KFC-Werchter.mp4",
                 address: "Grotestraat 52, 3118 Rotselaar"
             },
             {
                 name: "Bakkerij Wouters",
                 position: [50.97293034178899, 4.69907272139835],
-                video: "bakkers.mp4",
+                video: "./Bakkers.mp4",
                 address: "Sint-Janstraat 83, 3118 Rotselaar"
             },
             {
                 name: "Café De Wissel",
                 position: [50.973212343143594, 4.700709354318101],
-                video: "cafe-de-wissel.mp4",
+                video: "./cafe-de-wissel.mp4",
                 address: "Sint-Janstraat 101, 3118 Rotselaar"
             },
             {
                 name: "Demer en Dijle",
                 position: [50.96861854066734, 4.692866521034502],
-                video: "demer-en-dijle.mp4",
+                video: "./demer-en-dijle.mp4",
                 address: "Werchter"
             },
             {
                 name: "Frituur de Brug",
                 position: [50.969147013658336, 4.6905562436548145],
-                video: "frituur-de-brug.mp4",
+                video: "./frituur-de-brug.mp4",
                 address: "Provinciebaan 153, 3118 Rotselaar"
             }
         ];
@@ -226,16 +231,20 @@
             var videoLoader = document.getElementById('videoLoader');
             
             // Reset de video player
-            videoPlayer.classList.remove('loaded');
             videoLoader.style.display = 'block';
             
             // Toon de overlay eerst
             videoOverlay.style.display = 'block';
             
             // Laad dan de video
-            setTimeout(() => {
-                videoPlayer.src = video;
-            }, 100);
+            videoPlayer.src = video;
+            videoPlayer.load();
+            videoPlayer.play();
+            
+            // Verberg de loader wanneer de video kan afspelen
+            videoPlayer.oncanplay = function() {
+                videoLoader.style.display = 'none';
+            };
         }
 
         // Functie om de video te sluiten
@@ -245,7 +254,7 @@
             var videoLoader = document.getElementById('videoLoader');
             
             videoOverlay.style.display = 'none';
-            videoPlayer.classList.remove('loaded');
+            videoPlayer.pause();
             videoPlayer.src = '';
             videoLoader.style.display = 'none';
         }
