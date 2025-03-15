@@ -166,55 +166,55 @@
             {
                 name: "GBS De Kameleon",
                 position: [50.9716, 4.7007],
-                video: "https://drive.google.com/file/d/1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u/preview?autoplay=1",
+                video: "Kameleon.mp4",
                 address: "Kerkstraat 1, 3118 Rotselaar"
             },
             {
                 name: "Camping Klokkenberg",
                 position: [50.97829043445607, 4.724100922888267],
-                video: "https://drive.google.com/file/d/1YLorjVOv3R5ivFbq55IASMALQZ56zcQS/preview?autoplay=1",
+                video: "Camping De Klokkenberg.mp4",
                 address: "Grotestraat 120, 3118 Rotselaar"
             },
             {
                 name: "Chiro Werchter",
                 position: [50.97183716738979, 4.704431452468566],
-                video: "https://drive.google.com/file/d/1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t/preview?autoplay=1",
+                video: "Chiro.mp4",
                 address: "Nieuwebaan 10, 3118 Rotselaar"
             },
             {
                 name: "Delvora",
                 position: [50.9697176477687, 4.689669075765796],
-                video: "https://drive.google.com/file/d/1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu/preview?autoplay=1",
+                video: "Delvora.mp4",
                 address: "Haachtsesteenweg 6, 3118 Rotselaar"
             },
             {
                 name: "KFC Werchter",
                 position: [50.97732766499299, 4.711792725482745],
-                video: "https://drive.google.com/file/d/1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs/preview?autoplay=1",
+                video: "KFC Werchter.mp4",
                 address: "Grotestraat 52, 3118 Rotselaar"
             },
             {
                 name: "Bakkerij Wouters",
                 position: [50.97293034178899, 4.69907272139835],
-                video: "https://drive.google.com/file/d/1GdtaQi9p76ResDjimn5CtockDBOU0eLh/preview?autoplay=1",
+                video: "bakkers.mp4",
                 address: "Sint-Janstraat 83, 3118 Rotselaar"
             },
             {
                 name: "Café De Wissel",
                 position: [50.973212343143594, 4.700709354318101],
-                video: "https://drive.google.com/file/d/10QPdZjlSz_THOtAVDdQ_9Yk_yZaT5r-L/preview?autoplay=1",
+                video: "Café De Wissel.mp4",
                 address: "Sint-Janstraat 101, 3118 Rotselaar"
             },
             {
                 name: "Demer en Dijle",
                 position: [50.96861854066734, 4.692866521034502],
-                video: "https://drive.google.com/file/d/1vxLfuW8QpuaOcdaCQ0ia_bnp-9A8P3gz/preview?autoplay=1",
+                video: "Demer en dijle.mp4",
                 address: "Werchter"
             },
             {
                 name: "Frituur de Brug",
                 position: [50.969147013658336, 4.6905562436548145],
-                video: "https://drive.google.com/file/d/1JsFn5p-VcfCCY6pmmefECsR6_MerYhvC/preview?autoplay=1",
+                video: "Filmpje Frituur.mp4",
                 address: "Provinciebaan 153, 3118 Rotselaar"
             }
         ];
@@ -278,7 +278,23 @@
             `);
             
             marker.on('click', function() {
-                showVideo(location.video);
+                var video = document.createElement('video');
+                video.src = location.video;
+                video.controls = true;
+                video.autoplay = true;
+                video.style.width = '100%';
+                video.style.height = '100%';
+                
+                var videoOverlay = document.getElementById('videoOverlay');
+                var videoContainer = videoOverlay.querySelector('.video-container');
+                var oldVideo = videoContainer.querySelector('video');
+                var oldIframe = videoContainer.querySelector('iframe');
+                
+                if (oldVideo) videoContainer.removeChild(oldVideo);
+                if (oldIframe) videoContainer.removeChild(oldIframe);
+                
+                videoContainer.appendChild(video);
+                videoOverlay.style.display = 'block';
             });
         });
 
