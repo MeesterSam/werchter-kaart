@@ -7,10 +7,44 @@
         body {
             margin: 0;
             padding: 0;
+            display: flex;
+        }
+        #sidebar {
+            width: 250px;
+            height: 100vh;
+            background-color: #f8f9fa;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            overflow-y: auto;
         }
         #map {
-            width: 100%;
+            flex-grow: 1;
             height: 100vh;
+        }
+        .location-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .location-item {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .location-item:hover {
+            background-color: #e9ecef;
+        }
+        .location-name {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .location-address {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
         }
         .video-overlay {
             display: none;
@@ -54,9 +88,20 @@
             color: #666;
             margin-top: 5px;
         }
+        h1 {
+            margin: 0 0 20px 0;
+            color: #2c3e50;
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
+    <div id="sidebar">
+        <h1>Locaties</h1>
+        <div class="location-list" id="locationList">
+            <!-- Locaties worden hier dynamisch toegevoegd -->
+        </div>
+    </div>
     <div id="map"></div>
     <div class="video-overlay" id="videoOverlay">
         <div class="video-container">
@@ -71,8 +116,9 @@
         var map = L.map('map').setView([50.9735, 4.7069], 14);
 
         // Voeg de kaartlaag toe
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
+            attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://stamen.com/">Stamen Design</a>',
+            maxZoom: 18
         }).addTo(map);
 
         // Definieer alle locaties met exacte coördinaten
@@ -80,75 +126,67 @@
             {
                 name: "GBS De Kameleon",
                 position: [50.9716, 4.7007],
-                video: "https://drive.google.com/file/d/1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u/preview",
+                video: "https://drive.google.com/file/d/1lpCAovQsOYmggC6jDOp1k0nQuZj_Ub7u/preview?autoplay=1",
                 address: "Kerkstraat 1, 3118 Rotselaar"
             },
             {
                 name: "Camping Klokkenberg",
                 position: [50.97829043445607, 4.724100922888267],
-                video: "https://drive.google.com/file/d/1YLorjVOv3R5ivFbq55IASMALQZ56zcQS/preview",
+                video: "https://drive.google.com/file/d/1YLorjVOv3R5ivFbq55IASMALQZ56zcQS/preview?autoplay=1",
                 address: "Grotestraat 120, 3118 Rotselaar"
             },
             {
                 name: "Chiro Werchter",
                 position: [50.97183716738979, 4.704431452468566],
-                video: "https://drive.google.com/file/d/1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t/preview",
+                video: "https://drive.google.com/file/d/1wh7GvVwUJGnm5jh4H0Mpy33cw4x9UH3t/preview?autoplay=1",
                 address: "Nieuwebaan 10, 3118 Rotselaar"
             },
             {
                 name: "Delvora",
                 position: [50.9697176477687, 4.689669075765796],
-                video: "https://drive.google.com/file/d/1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu/preview",
+                video: "https://drive.google.com/file/d/1BzEeWFNV3VmjWPAEulvVioL1f4E6eUpu/preview?autoplay=1",
                 address: "Haachtsesteenweg 6, 3118 Rotselaar"
             },
             {
                 name: "KFC Werchter",
                 position: [50.97732766499299, 4.711792725482745],
-                video: "https://drive.google.com/file/d/1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs/preview",
+                video: "https://drive.google.com/file/d/1HC2VTVc8xf90kt97Jbc63F_zkJBiHibs/preview?autoplay=1",
                 address: "Grotestraat 52, 3118 Rotselaar"
             },
             {
                 name: "Bakkerij Wouters",
                 position: [50.97293034178899, 4.69907272139835],
-                video: "https://drive.google.com/file/d/1GdtaQi9p76ResDjimn5CtockDBOU0eLh/preview",
+                video: "https://drive.google.com/file/d/1GdtaQi9p76ResDjimn5CtockDBOU0eLh/preview?autoplay=1",
                 address: "Sint-Janstraat 83, 3118 Rotselaar"
             },
             {
                 name: "Café De Wissel",
                 position: [50.973212343143594, 4.700709354318101],
-                video: "https://drive.google.com/file/d/10QPdZjlSz_THOtAVDdQ_9Yk_yZaT5r-L/preview",
+                video: "https://drive.google.com/file/d/10QPdZjlSz_THOtAVDdQ_9Yk_yZaT5r-L/preview?autoplay=1",
                 address: "Sint-Janstraat 101, 3118 Rotselaar"
             },
             {
                 name: "Demer en Dijle",
                 position: [50.96861854066734, 4.692866521034502],
-                video: "https://drive.google.com/file/d/1vxLfuW8QpuaOcdaCQ0ia_bnp-9A8P3gz/preview",
+                video: "https://drive.google.com/file/d/1vxLfuW8QpuaOcdaCQ0ia_bnp-9A8P3gz/preview?autoplay=1",
                 address: "Werchter"
             },
             {
                 name: "Frituur de Brug",
                 position: [50.969147013658336, 4.6905562436548145],
-                video: "https://drive.google.com/file/d/1JsFn5p-VcfCCY6pmmefECsR6_MerYhvC/preview",
+                video: "https://drive.google.com/file/d/1JsFn5p-VcfCCY6pmmefECsR6_MerYhvC/preview?autoplay=1",
                 address: "Provinciebaan 153, 3118 Rotselaar"
             }
         ];
 
-        // Voeg markers toe voor alle locaties
-        locations.forEach(function(location) {
-            var marker = L.marker(location.position).addTo(map);
-            marker.bindPopup(`
-                <strong>${location.name}</strong>
-                <div class="location-info">${location.address}</div>
-            `);
+        // Functie om een video te tonen
+        function showVideo(video) {
+            var videoOverlay = document.getElementById('videoOverlay');
+            var videoPlayer = document.getElementById('videoPlayer');
             
-            marker.on('click', function() {
-                var videoOverlay = document.getElementById('videoOverlay');
-                var videoPlayer = document.getElementById('videoPlayer');
-                
-                videoPlayer.src = location.video;
-                videoOverlay.style.display = 'block';
-            });
-        });
+            videoPlayer.src = video;
+            videoOverlay.style.display = 'block';
+        }
 
         // Functie om de video te sluiten
         function closeVideo() {
@@ -158,6 +196,46 @@
             videoOverlay.style.display = 'none';
             videoPlayer.src = '';
         }
+
+        // Voeg markers toe voor alle locaties
+        var markers = {};
+        locations.forEach(function(location) {
+            var marker = L.marker(location.position).addTo(map);
+            markers[location.name] = marker;
+            
+            marker.bindPopup(`
+                <strong>${location.name}</strong>
+                <div class="location-info">${location.address}</div>
+            `);
+            
+            marker.on('click', function() {
+                showVideo(location.video);
+            });
+        });
+
+        // Vul de locatielijst
+        var locationList = document.getElementById('locationList');
+        locations.sort((a, b) => a.name.localeCompare(b.name)); // Sorteer op alfabetische volgorde
+
+        locations.forEach(function(location) {
+            var div = document.createElement('div');
+            div.className = 'location-item';
+            div.innerHTML = `
+                <div class="location-name">${location.name}</div>
+                <div class="location-address">${location.address}</div>
+            `;
+            
+            div.addEventListener('click', function() {
+                // Centreer de kaart op de locatie
+                map.setView(location.position, 16);
+                // Open de popup
+                markers[location.name].openPopup();
+                // Toon de video
+                showVideo(location.video);
+            });
+            
+            locationList.appendChild(div);
+        });
     </script>
 </body>
 </html> 
