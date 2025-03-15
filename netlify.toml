@@ -1,0 +1,5 @@
+[[headers]]
+  for = "/*.mp4"
+  [headers.values]
+    Content-Type = "video/mp4"
+    Access-Control-Allow-Origin = "*" 
